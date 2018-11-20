@@ -1,0 +1,45 @@
+#
+# This file is part of the ONEMA onema Package.
+# For the full copyright and license information,
+# please view the LICENSE file that was distributed
+# with this source code.
+#
+# copyright (c) 2018, Juan Manuel Torres (http://onema.io)
+#
+# @author Juan Manuel Torres <software@onema.io>
+#
+service: error-reporter
+
+provider:
+  name: aws
+  runtime: java8
+  profile: ${opt:profile, 'default'}
+  timeout: 30
+  versionFunctions: false
+  memorySize: 512
+  stage: dev
+  region: us-east-1
+
+  # you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements: ${file(infrastructure/global-values.yml):iamRoleStatements}
+
+  # Service wide environment variables
+  environment: ${file(infrastructure/global-values.yml):environment}
+
+# Custom values. These can be referenced in the Cloud Formation template
+custom: ${file(infrastructure/global-values.yml):custom}
+
+package:
+  artifact: target/scala-2.12/app.jar
+
+functions:
+
+  # functions
+  mailer-reporter:
+    handler: io.onema.userverless.mailerreporter.ErrorReporterFunction::lambdaHandler
+    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
+    events:
+      - sns:
+          arn:
+            Fn::ImportValue: "${self:custom.stageName}-error-topic-arn"
+          topicName: "${self:custom.stageName}-error-topic-arn"
