@@ -18,11 +18,8 @@ import io.onema.userverless.configuration.lambda.EnvLambdaConfiguration
 import io.onema.userverless.events.Sns.SnsEvent
 import io.onema.userverless.exception.MessageDecodingException
 import io.onema.userverless.function.SnsHandler
-import io.onema.userverless.mailerreporter.ErrorReporterFunction.Email
 import io.onema.userverless.model.Log.{LogErrorMessage, Rename}
-import org.json4s._
 import org.json4s.jackson.JsonMethods._
-
 
 class ErrorReporterFunction extends SnsHandler[LogErrorMessage] with EnvLambdaConfiguration {
 
@@ -31,41 +28,15 @@ class ErrorReporterFunction extends SnsHandler[LogErrorMessage] with EnvLambdaCo
   val recipients: Option[String] = getValue("recipients")
   val sender: String = getValue("sender").getOrElse(throw new RuntimeException("The sender env var is required"))
   val client: AmazonSNS = AmazonSNSClientBuilder.defaultClient()
+  val logic: ErrorReporterLogic = new ErrorReporterLogic(client, mailerTopic, sender, recipients)
 
   //--- Methods ---
   override def execute(event: LogErrorMessage, context: Context): Unit = {
-    val errorStr = event.asJson(Rename.errorMessage)
-    val prettyStr = pretty(render(parse(errorStr)))
-    if(event.function == context.getFunctionName){
-      return
+    if(event.function != context.getFunctionName){
+      val errorStr = event.asJson(Rename.errorMessage)
+      val prettyStr = pretty(render(parse(errorStr)))
+      logic.report(event, prettyStr)
     }
-    val subject = s"${event.appName}: ${event.function} ERROR"
-    val tempalte: String =
-      s"""
-        |<div>
-        |<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.css" rel="stylesheet" />
-        |<h2>${event.appName}: ${event.function} ERROR</h2>
-        |<h3>${event.message}</h3>
-        |
-        |<div style="background: #f0f3f3; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-        |  <table>
-        |  <tr>
-        |  <td>
-        |   <pre class="language-js">
-        |   $prettyStr
-        |   </pre>
-        |  </td>
-        |  </tr>
-        |  </table>
-        |</div>
-        |
-        |</div>
-        |
-      """.stripMargin
-    recipients.map(_.split(",")).foreach(to => {
-      val email = Email(to, sender, subject, tempalte).asJson
-      client.publish(mailerTopic, email)
-    })
   }
 
   override def jsonDecode(json: String): LogErrorMessage = {
