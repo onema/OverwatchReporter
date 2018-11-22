@@ -12,7 +12,7 @@ lazy val root = (project in file("."))
       val awsSdkVersion = "1.11.451"
       Seq(
         // Serverless Base!
-        "io.onema"                  % "userverless-core_2.12"      % "0.1.0-SNAPSHOT",
+        "io.onema"                  % "userverless-core_2.12"      % "0.1.0",
         "com.amazonaws"             % "aws-java-sdk-sns"           % awsSdkVersion,
 
         // Testing
