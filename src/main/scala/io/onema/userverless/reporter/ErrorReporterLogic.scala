@@ -9,12 +9,12 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.mailerreporter
+package io.onema.userverless.reporter
 
 import com.amazonaws.services.sns.AmazonSNS
 import io.onema.userverless.model.Log.{LogErrorMessage, Rename}
 import io.onema.json.Extensions._
-import io.onema.userverless.mailerreporter.ErrorReporterFunction.Email
+import io.onema.userverless.reporter.ErrorReporterFunction.Email
 
 class ErrorReporterLogic(val snsClient: AmazonSNS, val mailerTopic: String, val sender: String, val recipients: Option[String]) {
 
