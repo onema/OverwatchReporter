@@ -8,7 +8,7 @@
 #
 # @author Juan Manuel Torres <software@onema.io>
 #
-service: error-reporter
+service: overwatch-reporter
 
 provider:
   name: aws
@@ -35,11 +35,19 @@ package:
 functions:
 
   # functions
-  mailer-reporter:
-    handler: io.onema.userverless.mailerreporter.ErrorReporterFunction::lambdaHandler
-    onError: ${file(infrastructure/global-values.yml):deadLetterQueue}
+  error-reporter:
+    handler: io.onema.overwatch.reporter.ErrorReporterFunction::lambdaHandler
+    reservedConcurrency: 1
     events:
       - sns:
           arn:
             Fn::ImportValue: "${self:custom.stageName}-error-topic-arn"
           topicName: "${self:custom.stageName}-error-topic-arn"
+  metric-reporter:
+    handler: io.onema.overwatch.reporter.MetricReporterFunction::lambdaHandler
+    reservedConcurrency: 1
+    events:
+      - sns:
+          arn:
+            Fn::ImportValue: "${self:custom.stageName}-metric-topic-arn"
+          topicName: "${self:custom.stageName}-metric-topic-arn"

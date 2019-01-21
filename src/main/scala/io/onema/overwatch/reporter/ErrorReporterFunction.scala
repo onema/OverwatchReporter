@@ -9,7 +9,7 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.mailerreporter
+package io.onema.overwatch.reporter
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
@@ -54,5 +54,5 @@ class ErrorReporterFunction extends SnsHandler[LogErrorMessage] with EnvLambdaCo
 }
 
 object ErrorReporterFunction {
-  case class Email(to: Seq[String], from: String, subject: String, body: String, replyTo: String = "", raw: Boolean = false)
+  case class Email(to: Seq[String], from: String, subject: String, body: String, raw: Boolean = false, replyTo: Option[String] = None, attachments: Option[Seq[String]] = None)
 }

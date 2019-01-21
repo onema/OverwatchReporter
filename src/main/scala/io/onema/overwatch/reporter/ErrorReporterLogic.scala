@@ -9,14 +9,17 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.mailerreporter
+package io.onema.overwatch.reporter
 
 import com.amazonaws.services.sns.AmazonSNS
 import io.onema.userverless.model.Log.{LogErrorMessage, Rename}
 import io.onema.json.Extensions._
-import io.onema.userverless.mailerreporter.ErrorReporterFunction.Email
+import ErrorReporterFunction.Email
+import io.onema.userverless.function.LambdaLogger
 
 class ErrorReporterLogic(val snsClient: AmazonSNS, val mailerTopic: String, val sender: String, val recipients: Option[String]) {
+  //--- Fields ---
+  val log = LambdaLogger("errorReporterLogic")
 
   //--- Methods ---
   def report(event: LogErrorMessage, prettyStr: String): Unit = {
@@ -45,6 +48,7 @@ class ErrorReporterLogic(val snsClient: AmazonSNS, val mailerTopic: String, val 
       """.stripMargin
     recipients.map(_.split(",")).foreach(to => {
       val email = Email(to, sender, subject, tempalte).asJson
+      log.debug(email)
       snsClient.publish(mailerTopic, email)
     })
   }

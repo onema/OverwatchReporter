@@ -9,6 +9,9 @@ iamRoleStatements:
     Resource:
       - Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
   - Effect: Allow
+    Action: cloudwatch:PutMetricData
+    Resource: "*"
+  - Effect: Allow
     Action:
       - sns:Publish
     Resource:
@@ -29,6 +32,3 @@ environment:
 
 custom:
   stageName: ${opt:stage, self:provider.stage}
-
-deadLetterQueue:
-  Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"
