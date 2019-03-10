@@ -25,13 +25,9 @@ environment:
   STAGE_NAME: ${self:custom.stageName}
   APP_NAME: ${self:service}
   RECIPIENTS: ${env:ERROR_RECIPIENTS}
-  SENDER: ${env:ERROR_SENDER}
   MAILER_TOPIC:
     Fn::ImportValue: "${self:custom.stageName}-lambda-mailer-topic-arn"
 
 
 custom:
   stageName: ${opt:stage, self:provider.stage}
-
-deadLetterQueue:
-  Fn::ImportValue: "${self:custom.stageName}-dead-letter-queue-arn"

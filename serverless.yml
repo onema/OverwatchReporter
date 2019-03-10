@@ -35,15 +35,29 @@ package:
 functions:
 
   # functions
+  notification-reporter:
+    handler: io.onema.overwatch.reporter.NotificationReporterFunction::lambdaHandler
+    reservedConcurrency: 1
+    environment:
+      SENDER: ${env:NOTIFICATION_SENDER}
+    events:
+      - sns:
+          arn:
+            Fn::ImportValue: "${self:custom.stageName}-notification-topic-arn"
+          topicName: "${self:custom.stageName}-notification-topic-arn"
   error-reporter:
-    handler: io.onema.userverless.reporter.ErrorReporterFunction::lambdaHandler
+    handler: io.onema.overwatch.reporter.ErrorReporterFunction::lambdaHandler
+    reservedConcurrency: 1
+    environment:
+      SENDER: ${env:ERROR_SENDER}
     events:
       - sns:
           arn:
             Fn::ImportValue: "${self:custom.stageName}-error-topic-arn"
           topicName: "${self:custom.stageName}-error-topic-arn"
   metric-reporter:
-    handler: io.onema.userverless.reporter.MetricReporterFunction::lambdaHandler
+    handler: io.onema.overwatch.reporter.MetricReporterFunction::lambdaHandler
+    reservedConcurrency: 1
     events:
       - sns:
           arn:

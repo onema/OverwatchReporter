@@ -2,17 +2,17 @@ lazy val root = (project in file("."))
   .settings(
     organization := "io.onema",
 
-    name := "userverless-reporter",
+    name := "overwatch-reporter",
 
-    version := "0.1.0",
+    version := "0.2.0",
 
-    scalaVersion := "2.12.7",
+    scalaVersion := "2.12.8",
 
     libraryDependencies ++= {
-      val awsSdkVersion = "1.11.451"
+      val awsSdkVersion = "1.11.515"
       Seq(
         // Serverless Base!
-        "io.onema"                  % "userverless-core_2.12"      % "0.2.2-SNAPSHOT",
+        "io.onema"                  % "userverless-core_2.12"      % "0.4.0",
         "com.amazonaws"             % "aws-java-sdk-sns"           % awsSdkVersion,
         "com.amazonaws"             % "aws-java-sdk-cloudwatch"    % awsSdkVersion,
 

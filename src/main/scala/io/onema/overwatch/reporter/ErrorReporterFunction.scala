@@ -9,7 +9,7 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.reporter
+package io.onema.overwatch.reporter
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}
@@ -51,8 +51,4 @@ class ErrorReporterFunction extends SnsHandler[LogErrorMessage] with EnvLambdaCo
         throw new MessageDecodingException("The SNS Event contains no records, this should never happen!")
     }
   }
-}
-
-object ErrorReporterFunction {
-  case class Email(to: Seq[String], from: String, subject: String, body: String, replyTo: String = "", raw: Boolean = false)
 }

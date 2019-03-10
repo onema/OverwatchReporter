@@ -9,11 +9,10 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.reporter
+package io.onema.overwatch.reporter
 
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchClientBuilder
 import com.amazonaws.services.lambda.runtime.Context
-import io.onema.json.Extensions._
 import io.onema.userverless.configuration.lambda.EnvLambdaConfiguration
 import io.onema.userverless.function.SnsHandler
 import io.onema.userverless.model.Metric

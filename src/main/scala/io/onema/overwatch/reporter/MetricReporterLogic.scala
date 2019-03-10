@@ -9,13 +9,13 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.userverless.reporter
+package io.onema.overwatch.reporter
 
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
 import com.typesafe.scalalogging.Logger
 import io.onema.userverless.model.Metric
-import io.onema.userverless.reporter.MetricReporterLogic._
+import MetricReporterLogic._
 
 import scala.collection.JavaConverters._
 
