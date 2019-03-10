@@ -52,7 +52,3 @@ class ErrorReporterFunction extends SnsHandler[LogErrorMessage] with EnvLambdaCo
     }
   }
 }
-
-object ErrorReporterFunction {
-  case class Email(to: Seq[String], from: String, subject: String, body: String, raw: Boolean = false, replyTo: Option[String] = None, attachments: Option[Seq[String]] = None)
-}

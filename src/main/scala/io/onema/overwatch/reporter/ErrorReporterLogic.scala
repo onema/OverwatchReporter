@@ -12,14 +12,15 @@
 package io.onema.overwatch.reporter
 
 import com.amazonaws.services.sns.AmazonSNS
-import io.onema.userverless.model.Log.{LogErrorMessage, Rename}
+import com.typesafe.scalalogging.Logger
 import io.onema.json.Extensions._
-import ErrorReporterFunction.Email
-import io.onema.userverless.function.LambdaLogger
+import io.onema.overwatch.reporter.Model.Email
+import io.onema.userverless.model.Log.LogErrorMessage
 
 class ErrorReporterLogic(val snsClient: AmazonSNS, val mailerTopic: String, val sender: String, val recipients: Option[String]) {
+
   //--- Fields ---
-  val log = LambdaLogger("errorReporterLogic")
+  val log = Logger("errorReporterLogic")
 
   //--- Methods ---
   def report(event: LogErrorMessage, prettyStr: String): Unit = {
