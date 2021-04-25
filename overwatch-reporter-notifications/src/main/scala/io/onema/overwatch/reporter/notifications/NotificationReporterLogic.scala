@@ -9,18 +9,18 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.overwatch.reporter
+package io.onema.overwatch.reporter.notifications
 
 import com.amazonaws.services.sns.AmazonSNS
 import com.typesafe.scalalogging.Logger
-import io.onema.overwatch.reporter.NotificationReporterFunction.Notification
+import NotificationReporterFunction.Notification
 import io.onema.json.Extensions._
-import io.onema.overwatch.reporter.Model.Email
+import Model.Email
 
 class NotificationReporterLogic(val snsClient: AmazonSNS, val mailerTopic: String, val sender: String, val recipients: Option[String]) {
 
   //--- Fields ---
-  val log = Logger("errorReporterLogic")
+  private val log = Logger("errorReporterLogic")
 
   //--- Methods ---
   def report(notification: Notification): Unit = {

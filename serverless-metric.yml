@@ -12,7 +12,7 @@ service: overwatch-reporter
 
 provider:
   name: aws
-  runtime: java8
+  runtime: java11
   profile: ${opt:profile, 'default'}
   timeout: 30
   versionFunctions: false
@@ -33,28 +33,6 @@ package:
   artifact: target/scala-2.12/app.jar
 
 functions:
-
-  # functions
-  notification-reporter:
-    handler: io.onema.overwatch.reporter.NotificationReporterFunction::lambdaHandler
-    reservedConcurrency: 1
-    environment:
-      SENDER: ${env:NOTIFICATION_SENDER}
-    events:
-      - sns:
-          arn:
-            Fn::ImportValue: "${self:custom.stageName}-notification-topic-arn"
-          topicName: "${self:custom.stageName}-notification-topic-arn"
-  error-reporter:
-    handler: io.onema.overwatch.reporter.ErrorReporterFunction::lambdaHandler
-    reservedConcurrency: 1
-    environment:
-      SENDER: ${env:ERROR_SENDER}
-    events:
-      - sns:
-          arn:
-            Fn::ImportValue: "${self:custom.stageName}-error-topic-arn"
-          topicName: "${self:custom.stageName}-error-topic-arn"
   metric-reporter:
     handler: io.onema.overwatch.reporter.MetricReporterFunction::lambdaHandler
     reservedConcurrency: 1
