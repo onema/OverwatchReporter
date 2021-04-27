@@ -1,12 +1,13 @@
 
-lazy val scala213 = "2.13.1"
+lazy val scala213 = "2.13.5"
 lazy val scala212 = "2.12.10"
 lazy val supportedScalaVersions = List(scala213, scala212)
 
 ThisBuild / organization := "io.onema"
-ThisBuild / version      := "0.3.0"
+ThisBuild / version      := "0.4.0"
 ThisBuild / scalaVersion := scala213
 ThisBuild / parallelExecution in Test := false
+ThisBuild / assembly / assemblyJarName := "app.jar"
 
 lazy val overwatchReporter = (project in file("."))
   .settings(skip in publish := true)
@@ -15,9 +16,9 @@ publishArtifact in overwatchReporter := false
 
 val awsSdkVersion = "1.11.792"
 
-lazy val overwatchReorterMetrics = (project in file("overwatch-reporter-metrics"))
+lazy val overwatchReorterMetrics = (project in file("overwatch-reporter-metric"))
   .settings(
-    name := "overwatch-reporer-metrics",
+    name := "overwatch-reporter-metric",
     commonPublishSettings,
     crossScalaVersions := supportedScalaVersions,
     libraryDependencies ++= {
@@ -34,9 +35,9 @@ lazy val overwatchReorterMetrics = (project in file("overwatch-reporter-metrics"
     }
   )
 
-lazy val overwatchReorterErrors = (project in file("overwatch-reporter-errors"))
+lazy val overwatchReorterErrors = (project in file("overwatch-reporter-error"))
   .settings(
-    name := "overwatch-reporter-errors",
+    name := "overwatch-reporter-error",
     commonPublishSettings,
     crossScalaVersions := supportedScalaVersions,
     libraryDependencies ++= {
@@ -52,9 +53,9 @@ lazy val overwatchReorterErrors = (project in file("overwatch-reporter-errors"))
     }
   )
 
-lazy val overwatchReorterNotifications = (project in file("overwatch-reporter-notifications"))
+lazy val overwatchReorterNotifications = (project in file("overwatch-reporter-notification"))
   .settings(
-    name := "overwatch-reporter-notifications",
+    name := "overwatch-reporter-notification",
     commonPublishSettings,
     crossScalaVersions := supportedScalaVersions,
     libraryDependencies ++= {

@@ -9,11 +9,12 @@
 # @author Juan Manuel Torres <software@onema.io>
 #
 service: overwatch-reporter
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
   runtime: java11
-  profile: ${opt:profile, 'default'}
+  profile: ${opt:aws-profile, 'default'}
   timeout: 30
   versionFunctions: false
   memorySize: 512
@@ -30,7 +31,7 @@ provider:
 custom: ${file(infrastructure/global-values.yml):custom}
 
 package:
-  artifact: target/scala-2.12/app.jar
+  artifact: overwatch-reporter-error/target/scala-2.13/app.jar
 
 functions:
   error-reporter:
@@ -38,6 +39,9 @@ functions:
     reservedConcurrency: 1
     environment:
       SENDER: ${env:ERROR_SENDER}
+      RECIPIENTS: ${env:ERROR_RECIPIENTS}
+      MAILER_TOPIC:
+        Fn::ImportValue: "${self:custom.stageName}-lambda-mailer-topic-arn"
     events:
       - sns:
           arn:
