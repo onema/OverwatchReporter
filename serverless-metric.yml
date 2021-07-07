@@ -1,0 +1,44 @@
+#
+# This file is part of the ONEMA onema Package.
+# For the full copyright and license information,
+# please view the LICENSE file that was distributed
+# with this source code.
+#
+# copyright (c) 2018, Juan Manuel Torres (http://onema.io)
+#
+# @author Juan Manuel Torres <software@onema.io>
+#
+service: overwatch-reporter
+variablesResolutionMode: 20210326
+
+provider:
+  name: aws
+  runtime: java11
+  profile: ${opt:aws-profile, 'default'}
+  timeout: 30
+  versionFunctions: false
+  memorySize: 512
+  stage: dev
+  region: us-east-1
+
+  # you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements: ${file(infrastructure/global-values.yml):iamRoleStatements}
+
+  # Service wide environment variables
+  environment: ${file(infrastructure/global-values.yml):environment}
+
+# Custom values. These can be referenced in the Cloud Formation template
+custom: ${file(infrastructure/global-values.yml):custom}
+
+package:
+  artifact: overwatch-reporter-metric/target/scala-2.13/app.jar
+
+functions:
+  metric-reporter:
+    handler: io.onema.overwatch.reporter.MetricReporterFunction::lambdaHandler
+    reservedConcurrency: 1
+    events:
+      - sns:
+          arn:
+            Fn::ImportValue: "${self:custom.stageName}-metric-topic-arn"
+          topicName: "${self:custom.stageName}-metric-topic-arn"

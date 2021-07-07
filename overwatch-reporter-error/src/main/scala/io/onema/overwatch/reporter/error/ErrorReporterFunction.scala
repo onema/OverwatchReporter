@@ -9,7 +9,7 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.overwatch.reporter
+package io.onema.overwatch.reporter.error
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sns.{AmazonSNS, AmazonSNSClientBuilder}

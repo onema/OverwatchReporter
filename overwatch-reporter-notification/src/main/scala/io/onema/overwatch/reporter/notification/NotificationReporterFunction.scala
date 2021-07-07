@@ -9,11 +9,11 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.overwatch.reporter
+package io.onema.overwatch.reporter.notification
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.sns.AmazonSNSClientBuilder
-import io.onema.overwatch.reporter.NotificationReporterFunction.Notification
+import NotificationReporterFunction.Notification
 import io.onema.userverless.configuration.lambda.EnvLambdaConfiguration
 import io.onema.userverless.function.SnsHandler
 

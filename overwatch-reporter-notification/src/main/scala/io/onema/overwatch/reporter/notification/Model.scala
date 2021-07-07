@@ -9,7 +9,7 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.overwatch.reporter
+package io.onema.overwatch.reporter.notification
 
 object Model {
   case class Email(to: Seq[String], from: String, subject: String, body: String, raw: Boolean = false, replyTo: Option[String] = None, attachments: Option[Seq[String]] = None)

@@ -9,7 +9,7 @@
   * @author Juan Manuel Torres <software@onema.io>
   */
 
-package io.onema.overwatch.reporter
+package io.onema.overwatch.reporter.metric
 
 import com.amazonaws.services.cloudwatch.AmazonCloudWatch
 import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest}
@@ -17,12 +17,12 @@ import com.typesafe.scalalogging.Logger
 import io.onema.userverless.model.Metric
 import MetricReporterLogic._
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class MetricReporterLogic(val client: AmazonCloudWatch) {
 
   //--- Fields ---
-  val log = Logger(classOf[MetricReporterLogic])
+  private val log = Logger(classOf[MetricReporterLogic])
 
   //--- Methods ---
   def report(parsedMetrics: Seq[Metric]): Unit = {
@@ -55,7 +55,7 @@ class MetricReporterLogic(val client: AmazonCloudWatch) {
     metricDatum.foreach(x => {
       val request = new PutMetricDataRequest()
         .withNamespace(s"$ns")
-      log.debug(s"BATCHED ${x.length} metrics for the namespace $ns")
+      log.debug(s"BATCHED ${x.length} metric for the namespace $ns")
       x.foreach(request.withMetricData(_))
       client.putMetricData(request)
     })
@@ -63,7 +63,6 @@ class MetricReporterLogic(val client: AmazonCloudWatch) {
 }
 
 object MetricReporterLogic {
-  val log = Logger(classOf[MetricReporterLogic])
 
   //--- Methods ---
   def toPascalCase(value: String): String = {
